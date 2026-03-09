@@ -347,6 +347,93 @@ body{display:flex;flex-direction:column}
 </style>
 </head>
 <body>
+<!-- ═══ LOGIN / REGISTER SCREEN ═══ -->
+<div id="auth-screen" style="display:none;position:fixed;inset:0;z-index:9999;background:var(--bg);overflow-y:auto;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)">
+  <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px">
+    <!-- Logo -->
+    <div style="text-align:center;margin-bottom:32px">
+      <div style="width:72px;height:72px;background:linear-gradient(135deg,var(--accent),#2ecc71);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 14px">🍽️</div>
+      <div style="font-weight:900;font-size:22px;letter-spacing:-0.5px">RestaurantePRO</div>
+      <div style="font-size:13px;color:var(--text2);margin-top:4px">CRM Alimentar de Campo</div>
+    </div>
+
+    <!-- Card -->
+    <div style="width:100%;max-width:380px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px">
+      
+      <!-- Tabs -->
+      <div style="display:flex;background:var(--surface2);border-radius:10px;padding:3px;margin-bottom:20px">
+        <button id="auth-tab-login" onclick="switchAuthTab('login')"
+          style="flex:1;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:700;cursor:pointer;background:var(--accent);color:#fff;font-family:inherit">
+          Entrar
+        </button>
+        <button id="auth-tab-register" onclick="switchAuthTab('register')"
+          style="flex:1;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:700;cursor:pointer;background:none;color:var(--text2);font-family:inherit">
+          Criar conta
+        </button>
+      </div>
+
+      <!-- Login form -->
+      <div id="auth-login-form">
+        <div id="auth-welcome" style="font-weight:800;font-size:16px;margin-bottom:18px;text-align:center"></div>
+        <div style="margin-bottom:12px">
+          <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">EMAIL</label>
+          <input id="login-email" type="email" placeholder="o.teu@email.com"
+            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none"
+            onkeydown="if(event.key==='Enter')document.getElementById('login-pass').focus()">
+        </div>
+        <div style="margin-bottom:18px;position:relative">
+          <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">PASSWORD</label>
+          <input id="login-pass" type="password" placeholder="••••••••"
+            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 40px 11px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none"
+            onkeydown="if(event.key==='Enter')doLogin()">
+          <button onclick="togglePassVis('login-pass',this)" style="position:absolute;right:10px;bottom:10px;background:none;border:none;cursor:pointer;font-size:16px;color:var(--text2)">👁</button>
+        </div>
+        <div id="login-error" style="display:none;background:rgba(232,57,74,.12);border:1px solid rgba(232,57,74,.3);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--red);margin-bottom:12px;text-align:center"></div>
+        <button onclick="doLogin()"
+          style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">
+          Entrar →
+        </button>
+      </div>
+
+      <!-- Register form -->
+      <div id="auth-register-form" style="display:none">
+        <div style="margin-bottom:12px">
+          <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">NOME</label>
+          <input id="reg-name" type="text" placeholder="O teu nome"
+            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none"
+            onkeydown="if(event.key==='Enter')document.getElementById('reg-email').focus()">
+        </div>
+        <div style="margin-bottom:12px">
+          <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">EMAIL</label>
+          <input id="reg-email" type="email" placeholder="o.teu@email.com"
+            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none"
+            onkeydown="if(event.key==='Enter')document.getElementById('reg-pass').focus()">
+        </div>
+        <div style="margin-bottom:12px;position:relative">
+          <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">PASSWORD</label>
+          <input id="reg-pass" type="password" placeholder="Mínimo 6 caracteres"
+            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 40px 11px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none"
+            onkeydown="if(event.key==='Enter')document.getElementById('reg-pass2').focus()">
+          <button onclick="togglePassVis('reg-pass',this)" style="position:absolute;right:10px;bottom:10px;background:none;border:none;cursor:pointer;font-size:16px;color:var(--text2)">👁</button>
+        </div>
+        <div style="margin-bottom:18px;position:relative">
+          <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">CONFIRMAR PASSWORD</label>
+          <input id="reg-pass2" type="password" placeholder="Repete a password"
+            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 40px 11px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none"
+            onkeydown="if(event.key==='Enter')doRegister()">
+          <button onclick="togglePassVis('reg-pass2',this)" style="position:absolute;right:10px;bottom:10px;background:none;border:none;cursor:pointer;font-size:16px;color:var(--text2)">👁</button>
+        </div>
+        <div id="reg-error" style="display:none;background:rgba(232,57,74,.12);border:1px solid rgba(232,57,74,.3);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--red);margin-bottom:12px;text-align:center"></div>
+        <button onclick="doRegister()"
+          style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">
+          Criar Conta →
+        </button>
+      </div>
+    </div>
+    <div style="margin-top:16px;font-size:11px;color:var(--text2);text-align:center">Os dados ficam guardados apenas neste dispositivo</div>
+  </div>
+</div>
+
 
 <!-- TOPBAR -->
 <div class="topbar">
@@ -2273,7 +2360,146 @@ async function gcalImportEvents(){
 }
 
 // Call gcalInit once Google Identity Services loads
+
+// ══════════════════════════════════════
+// AUTH — Login / Register
+// ══════════════════════════════════════
+let currentUser = null;
+
+async function hashPass(pass){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pass));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+function authInit(){
+  const theme = localStorage.getItem('crm_theme')||'dark';
+  if(theme==='light') document.documentElement.setAttribute('data-theme','light');
+
+  const users = JSON.parse(localStorage.getItem('crm_users')||'[]');
+  const sess  = localStorage.getItem('crm_session');
+
+  // Check active session
+  if(sess){
+    const user = users.find(u=>u.email===sess);
+    if(user){
+      currentUser = user;
+      showApp();
+      return;
+    }
+  }
+
+  // Show auth screen
+  document.getElementById('auth-screen').style.display='block';
+  // Hide app
+  document.querySelector('.topbar').style.display='none';
+  document.querySelector('.pages').style.display='none';
+  document.querySelector('.bottom-nav').style.display='none';
+  const dsn = document.querySelector('.desktop-nav');
+  if(dsn) dsn.style.display='none';
+  const fab = document.getElementById('fab');
+  if(fab) fab.style.display='none';
+
+  // If users exist, show login tab, else show register tab
+  if(users.length === 0){
+    switchAuthTab('register');
+  } else {
+    switchAuthTab('login');
+    // Pre-fill welcome message
+    const el = document.getElementById('auth-welcome');
+    if(el) el.textContent = `Bem-vindo de volta 👋`;
+  }
+}
+
+function showApp(){
+  document.getElementById('auth-screen').style.display='none';
+  document.querySelector('.topbar').style.display='';
+  document.querySelector('.pages').style.display='';
+  document.querySelector('.bottom-nav').style.display='';
+  const dsn = document.querySelector('.desktop-nav');
+  if(dsn) dsn.style.display='';
+  // Update topbar with user name
+  const logoText = document.querySelector('.logo-text');
+  if(logoText && currentUser){
+    logoText.innerHTML = `RestaurantePRO <span style="font-size:11px;font-weight:500;color:var(--text2)">${currentUser.name}</span>`;
+  }
+}
+
+function switchAuthTab(tab){
+  document.getElementById('auth-login-form').style.display    = tab==='login'    ? '' : 'none';
+  document.getElementById('auth-register-form').style.display = tab==='register' ? '' : 'none';
+  document.getElementById('auth-tab-login').style.background    = tab==='login'    ? 'var(--accent)' : 'none';
+  document.getElementById('auth-tab-login').style.color         = tab==='login'    ? '#fff' : 'var(--text2)';
+  document.getElementById('auth-tab-register').style.background = tab==='register' ? 'var(--accent)' : 'none';
+  document.getElementById('auth-tab-register').style.color      = tab==='register' ? '#fff' : 'var(--text2)';
+}
+
+async function doLogin(){
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const pass  = document.getElementById('login-pass').value;
+  const errEl = document.getElementById('login-error');
+  errEl.style.display='none';
+
+  if(!email||!pass){showAuthError('login','Preenche todos os campos');return;}
+
+  const users = JSON.parse(localStorage.getItem('crm_users')||'[]');
+  const user  = users.find(u=>u.email===email);
+  if(!user){showAuthError('login','Email não encontrado');return;}
+
+  const hash = await hashPass(pass);
+  if(hash !== user.passHash){showAuthError('login','Password incorreta');return;}
+
+  // Success
+  currentUser = user;
+  localStorage.setItem('crm_session', email);
+  showApp();
+}
+
+async function doRegister(){
+  const name  = document.getElementById('reg-name').value.trim();
+  const email = document.getElementById('reg-email').value.trim().toLowerCase();
+  const pass  = document.getElementById('reg-pass').value;
+  const pass2 = document.getElementById('reg-pass2').value;
+
+  if(!name||!email||!pass||!pass2){showAuthError('reg','Preenche todos os campos');return;}
+  if(pass.length<6){showAuthError('reg','Password deve ter pelo menos 6 caracteres');return;}
+  if(pass!==pass2){showAuthError('reg','As passwords não coincidem');return;}
+  if(!/^[^@]+@[^@]+\.[^@]+$/.test(email)){showAuthError('reg','Email inválido');return;}
+
+  const users = JSON.parse(localStorage.getItem('crm_users')||'[]');
+  if(users.find(u=>u.email===email)){showAuthError('reg','Este email já está registado');return;}
+
+  const hash = await hashPass(pass);
+  const user = {name, email, passHash:hash, createdAt: new Date().toISOString()};
+  users.push(user);
+  localStorage.setItem('crm_users', JSON.stringify(users));
+
+  currentUser = user;
+  localStorage.setItem('crm_session', email);
+  showApp();
+  toast(`✅ Bem-vindo, ${name}!`);
+}
+
+function showAuthError(form, msg){
+  const id = form==='login' ? 'login-error' : 'reg-error';
+  const el = document.getElementById(id);
+  if(el){el.textContent=msg;el.style.display='block';}
+}
+
+function togglePassVis(inputId, btn){
+  const inp = document.getElementById(inputId);
+  if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}
+  else{inp.type='password';btn.textContent='👁';}
+}
+
+function doLogout(){
+  localStorage.removeItem('crm_session');
+  currentUser=null;
+  closeSheet('settings-sheet');
+  setTimeout(()=>authInit(), 300);
+}
+
 window.addEventListener('load',()=>{
+  authInit();
   setTimeout(gcalInit,1500); // wait for GSI to load
 });
 
@@ -3673,6 +3899,14 @@ document.querySelectorAll('.c-yellow').forEach(el=>el.style.color='var(--yellow)
           <button class="btn btn-ghost btn-sm" style="flex:1" onclick="document.getElementById('restore-file').click()">📥 Restaurar</button>
         </div>
         <input type="file" id="restore-file" accept=".json" style="display:none" onchange="importBackup(this)">
+      </div>
+
+      <!-- LOGOUT -->
+      <div style="margin-bottom:12px">
+        <button onclick="doLogout()"
+          style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;color:var(--text);font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px">
+          🚪 Terminar Sessão
+        </button>
       </div>
 
       <!-- DANGER ZONE -->
