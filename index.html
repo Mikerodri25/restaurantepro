@@ -23,6 +23,12 @@
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
+[data-theme="light"] {
+  --bg:#f0f2f8;--surface:#ffffff;--surface2:#e8ebf4;--surface3:#dde1ee;
+  --border:#c8cde0;--text:#1a1e2e;--text2:#5a6080;--text3:#9098b8;
+  --accent:#2d5fff;--accent2:#4a75ff;
+  --green:#18a84e;--yellow:#d4861a;--red:#cc2a3a;--gray:#6070a0;
+}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text)}
 body{display:flex;flex-direction:column}
@@ -2449,7 +2455,7 @@ function renderDashboard(){
 // ══════════════════════════════════════
 function openSheet(id){
   document.getElementById(id).classList.add('open');
-  if(id==='settings-sheet')updateApiKeyStatus();
+  if(id==='settings-sheet'){updateApiKeyStatus();const t=localStorage.getItem('crm_theme')||'dark';const db=document.getElementById('theme-dark-btn');const lb=document.getElementById('theme-light-btn');if(db)db.style.borderColor=t==='dark'?'var(--accent)':'var(--border)';if(lb)lb.style.borderColor=t==='light'?'var(--accent)':'var(--border)';}
 }
 function closeSheet(id){document.getElementById(id).classList.remove('open')}
 
@@ -2495,7 +2501,22 @@ function switchPage(p){
 // ══════════════════════════════════════
 // SETTINGS & API KEY
 // ══════════════════════════════════════
-function getApiKey(){return localStorage.getItem('crm_anthropic_key')||'';}
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme', t==='light'?'light':'');
+  localStorage.setItem('crm_theme', t);
+  // Update button borders in settings
+  const db=document.getElementById('theme-dark-btn');
+  const lb=document.getElementById('theme-light-btn');
+  if(db)db.style.borderColor=t==='dark'?'var(--accent)':'var(--border)';
+  if(lb)lb.style.borderColor=t==='light'?'var(--accent)':'var(--border)';
+  // Update map theme-color meta
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', t==='light'?'#f0f2f8':'#0a0c10');
+}
+
+// Load saved theme
+(()=>{const t=localStorage.getItem('crm_theme')||'dark';if(t==='light')document.documentElement.setAttribute('data-theme','light');})();
+
+function getApiKey(){return localStorage.getItem('crm_anthropic_key')||'AIzaSyBq_gaiqECStuldAREEQ1pCHxCYX2G9IMY';}
 
 function saveApiKey(){
   const val=document.getElementById('apikey-input').value.trim();
@@ -3529,29 +3550,21 @@ document.querySelectorAll('.c-yellow').forEach(el=>el.style.color='var(--yellow)
         </div>
       </div>
 
-      <!-- API KEY SECTION -->
+      <!-- TEMA SECTION -->
       <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-          <span style="font-size:18px">🤖</span>
-          <div style="font-weight:700;font-size:14px">Assistente IA (Gemini)</div>
-          <div id="apikey-status" style="margin-left:auto;font-size:11px;font-weight:700;color:var(--text2)">Não configurado</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px">
+          <span style="font-size:18px">🎨</span>
+          <div style="font-weight:700;font-size:14px">Tema</div>
         </div>
-        <div style="font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.5">
-          Insere a tua API key do <b style="color:var(--text)">Google AI Studio</b> — completamente <b style="color:var(--green)">gratuito</b>, sem cartão.<br>
-          A key fica guardada <b style="color:var(--text)">apenas no teu dispositivo</b>.
-        </div>
-        <div style="position:relative">
-          <input type="password" id="apikey-input" placeholder="AIzaSy..." 
-            style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 40px 10px 12px;color:var(--text);font-size:13px;font-family:DM Mono,monospace;outline:none">
-          <button onclick="toggleApiKeyVis()" id="apikey-eye" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;font-size:16px;color:var(--text2)">👁️</button>
-        </div>
-        <div style="display:flex;gap:8px;margin-top:10px">
-          <button class="btn btn-primary" style="flex:1" onclick="saveApiKey()">💾 Guardar</button>
-          <button class="btn btn-red btn-sm" onclick="clearApiKey()">🗑️ Remover</button>
-        </div>
-        <div style="margin-top:10px;font-size:11px;color:var(--text2);line-height:1.6">
-          👉 Obtém a tua key <b>gratuita</b> em <span style="color:var(--accent2);text-decoration:underline;cursor:pointer" onclick="window.open('https://aistudio.google.com/app/apikey','_blank')">aistudio.google.com</span><br>
-          → "Get API key" → "Create API key" → Copia e cola aqui
+        <div style="display:flex;gap:8px">
+          <button id="theme-dark-btn" onclick="setTheme('dark')"
+            style="flex:1;padding:12px 8px;border-radius:10px;border:2px solid var(--accent);background:#0a0c10;color:#dce1f5;font-size:13px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px">
+            🌙<span>Escuro</span>
+          </button>
+          <button id="theme-light-btn" onclick="setTheme('light')"
+            style="flex:1;padding:12px 8px;border-radius:10px;border:2px solid var(--border);background:#f0f2f8;color:#1a1e2e;font-size:13px;font-weight:700;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px">
+            ☀️<span>Claro</span>
+          </button>
         </div>
       </div>
 
