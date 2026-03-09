@@ -393,9 +393,13 @@ body{display:flex;flex-direction:column}
           style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">
           Entrar →
         </button>
+        <button onclick="switchAuthTab('forgot')" style="width:100%;background:none;border:none;color:var(--text2);font-size:12px;cursor:pointer;margin-top:12px;font-family:inherit;text-decoration:underline">
+          Esqueci a password
+        </button>
       </div>
 
       <!-- Register form -->
+      <!-- REGISTER FORM -->
       <div id="auth-register-form" style="display:none">
         <div style="margin-bottom:12px">
           <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">NOME</label>
@@ -429,6 +433,83 @@ body{display:flex;flex-direction:column}
           Criar Conta →
         </button>
       </div>
+
+      <!-- RECOVERY CODE DISPLAY (shown after register) -->
+      <div id="auth-code-display" style="display:none">
+        <div style="text-align:center;margin-bottom:16px">
+          <div style="font-size:32px;margin-bottom:8px">🔐</div>
+          <div style="font-weight:800;font-size:16px;margin-bottom:6px">Guarda este código!</div>
+          <div style="font-size:12px;color:var(--text2);line-height:1.5">É o único modo de recuperares a conta se esqueceres a password. Guarda num papel ou nas notas do telemóvel.</div>
+        </div>
+        <div id="recovery-code-box"
+          style="background:var(--surface2);border:2px dashed var(--accent);border-radius:12px;padding:18px;text-align:center;margin-bottom:16px;cursor:pointer"
+          onclick="copyRecoveryCode()" title="Clica para copiar">
+          <div id="recovery-code-text" style="font-family:DM Mono,monospace;font-size:20px;font-weight:700;letter-spacing:4px;color:var(--accent2)"></div>
+          <div style="font-size:11px;color:var(--text2);margin-top:6px">clica para copiar</div>
+        </div>
+        <button onclick="doRegister_confirm()"
+          style="width:100%;background:var(--green);color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">
+          ✅ Guardei o código — Entrar
+        </button>
+      </div>
+
+      <!-- FORGOT PASSWORD FORM -->
+      <div id="auth-forgot-form" style="display:none">
+        <div style="text-align:center;margin-bottom:16px">
+          <div style="font-size:28px;margin-bottom:6px">🔑</div>
+          <div style="font-weight:800;font-size:15px;margin-bottom:4px">Recuperar acesso</div>
+          <div style="font-size:12px;color:var(--text2)">Usa o código que recebeste quando criaste a conta</div>
+        </div>
+        <div style="margin-bottom:12px">
+          <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">EMAIL</label>
+          <input id="forgot-email" type="email" placeholder="o.teu@email.com"
+            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none">
+        </div>
+        <div style="margin-bottom:12px">
+          <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">CÓDIGO DE RECUPERAÇÃO</label>
+          <input id="forgot-code" type="text" placeholder="XXXX-XXXX"
+            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:DM Mono,monospace;letter-spacing:2px;outline:none">
+        </div>
+        <div style="margin-bottom:12px;position:relative">
+          <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">NOVA PASSWORD</label>
+          <input id="forgot-newpass" type="password" placeholder="Nova password"
+            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 40px 11px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none">
+          <button onclick="togglePassVis('forgot-newpass',this)" style="position:absolute;right:10px;bottom:10px;background:none;border:none;cursor:pointer;font-size:16px;color:var(--text2)">👁</button>
+        </div>
+        <div id="forgot-error" style="display:none;background:rgba(232,57,74,.12);border:1px solid rgba(232,57,74,.3);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--red);margin-bottom:12px;text-align:center"></div>
+        <button onclick="doForgotRecover()"
+          style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:10px">
+          Recuperar Conta →
+        </button>
+        <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:4px">
+          <div style="font-size:12px;color:var(--text2);text-align:center;margin-bottom:8px">Não tens o código?</div>
+          <button onclick="showResetConfirm()"
+            style="width:100%;background:rgba(232,57,74,.1);border:1px solid rgba(232,57,74,.3);border-radius:10px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;color:var(--red);font-family:inherit">
+            ⚠️ Reset total (perde todos os dados)
+          </button>
+        </div>
+        <button onclick="showLoginPanel()" style="width:100%;background:none;border:none;color:var(--text2);font-size:12px;cursor:pointer;margin-top:10px;font-family:inherit">← Voltar</button>
+      </div>
+
+      <!-- RESET CONFIRM -->
+      <div id="auth-reset-confirm" style="display:none">
+        <div style="text-align:center;margin-bottom:20px">
+          <div style="font-size:40px;margin-bottom:10px">⚠️</div>
+          <div style="font-weight:800;font-size:16px;color:var(--red);margin-bottom:8px">Apagar tudo?</div>
+          <div style="font-size:13px;color:var(--text2);line-height:1.6">Isto vai apagar <b style="color:var(--text)">todos os teus dados</b> — clientes, visitas, vendas e conta. Esta ação é <b style="color:var(--red)">irreversível</b>.</div>
+        </div>
+        <div style="margin-bottom:16px">
+          <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">ESCREVE "APAGAR" PARA CONFIRMAR</label>
+          <input id="reset-confirm-input" type="text" placeholder="APAGAR"
+            style="width:100%;background:var(--surface2);border:1px solid rgba(232,57,74,.4);border-radius:10px;padding:11px 14px;color:var(--red);font-size:14px;font-family:inherit;outline:none;text-align:center;font-weight:700">
+        </div>
+        <button onclick="doHardReset()"
+          style="width:100%;background:var(--red);color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:10px">
+          🗑️ Apagar tudo
+        </button>
+        <button onclick="switchAuthTab('forgot')" style="width:100%;background:none;border:none;color:var(--text2);font-size:12px;cursor:pointer;font-family:inherit">← Voltar</button>
+      </div>
+
     </div>
     <div style="margin-top:16px;font-size:11px;color:var(--text2);text-align:center">Os dados ficam guardados apenas neste dispositivo</div>
   </div>
@@ -2362,52 +2443,39 @@ async function gcalImportEvents(){
 // Call gcalInit once Google Identity Services loads
 
 // ══════════════════════════════════════
-// AUTH — Login / Register
+// AUTH — Login / Register / Recovery
 // ══════════════════════════════════════
 let currentUser = null;
+let _pendingUser = null; // store user object before showing recovery code
 
 async function hashPass(pass){
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(pass));
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
 
+function genRecoveryCode(){
+  const chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const part=()=>Array.from({length:4},()=>chars[Math.floor(Math.random()*chars.length)]).join('');
+  return part()+'-'+part();
+}
+
 function authInit(){
-  const theme = localStorage.getItem('crm_theme')||'dark';
-  if(theme==='light') document.documentElement.setAttribute('data-theme','light');
-
-  const users = JSON.parse(localStorage.getItem('crm_users')||'[]');
-  const sess  = localStorage.getItem('crm_session');
-
-  // Check active session
+  const theme=localStorage.getItem('crm_theme')||'dark';
+  if(theme==='light')document.documentElement.setAttribute('data-theme','light');
+  const users=JSON.parse(localStorage.getItem('crm_users')||'[]');
+  const sess=localStorage.getItem('crm_session');
   if(sess){
-    const user = users.find(u=>u.email===sess);
-    if(user){
-      currentUser = user;
-      showApp();
-      return;
-    }
+    const user=users.find(u=>u.email===sess);
+    if(user){currentUser=user;showApp();return;}
   }
-
-  // Show auth screen
   document.getElementById('auth-screen').style.display='block';
-  // Hide app
   document.querySelector('.topbar').style.display='none';
   document.querySelector('.pages').style.display='none';
   document.querySelector('.bottom-nav').style.display='none';
-  const dsn = document.querySelector('.desktop-nav');
-  if(dsn) dsn.style.display='none';
-  const fab = document.getElementById('fab');
-  if(fab) fab.style.display='none';
-
-  // If users exist, show login tab, else show register tab
-  if(users.length === 0){
-    switchAuthTab('register');
-  } else {
-    switchAuthTab('login');
-    // Pre-fill welcome message
-    const el = document.getElementById('auth-welcome');
-    if(el) el.textContent = `Bem-vindo de volta 👋`;
-  }
+  const dsn=document.querySelector('.desktop-nav');if(dsn)dsn.style.display='none';
+  const fab=document.getElementById('fab');if(fab)fab.style.display='none';
+  if(users.length===0){switchAuthTab('register');}
+  else{switchAuthTab('login');}
 }
 
 function showApp(){
@@ -2415,78 +2483,120 @@ function showApp(){
   document.querySelector('.topbar').style.display='';
   document.querySelector('.pages').style.display='';
   document.querySelector('.bottom-nav').style.display='';
-  const dsn = document.querySelector('.desktop-nav');
-  if(dsn) dsn.style.display='';
-  // Update topbar with user name
-  const logoText = document.querySelector('.logo-text');
-  if(logoText && currentUser){
-    logoText.innerHTML = `RestaurantePRO <span style="font-size:11px;font-weight:500;color:var(--text2)">${currentUser.name}</span>`;
-  }
+  const dsn=document.querySelector('.desktop-nav');if(dsn)dsn.style.display='';
+  const logoText=document.querySelector('.logo-text');
+  if(logoText&&currentUser)logoText.innerHTML=`RestaurantePRO <span style="font-size:11px;font-weight:500;color:var(--text2)">${currentUser.name}</span>`;
 }
 
 function switchAuthTab(tab){
-  document.getElementById('auth-login-form').style.display    = tab==='login'    ? '' : 'none';
-  document.getElementById('auth-register-form').style.display = tab==='register' ? '' : 'none';
-  document.getElementById('auth-tab-login').style.background    = tab==='login'    ? 'var(--accent)' : 'none';
-  document.getElementById('auth-tab-login').style.color         = tab==='login'    ? '#fff' : 'var(--text2)';
-  document.getElementById('auth-tab-register').style.background = tab==='register' ? 'var(--accent)' : 'none';
-  document.getElementById('auth-tab-register').style.color      = tab==='register' ? '#fff' : 'var(--text2)';
+  const panels=['auth-login-form','auth-register-form','auth-code-display','auth-forgot-form','auth-reset-confirm'];
+  panels.forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='none';});
+  // Tab buttons
+  ['login','register'].forEach(t=>{
+    const btn=document.getElementById('auth-tab-'+t);
+    if(!btn)return;
+    const active=(t===tab||(tab==='forgot'&&t==='login'));
+    btn.style.background=active?'var(--accent)':'none';
+    btn.style.color=active?'#fff':'var(--text2)';
+  });
+  const map={login:'auth-login-form',register:'auth-register-form',code:'auth-code-display',forgot:'auth-forgot-form',reset:'auth-reset-confirm'};
+  const el=document.getElementById(map[tab]);
+  if(el)el.style.display='';
 }
 
+function showLoginPanel(){switchAuthTab('login');}
+function showResetConfirm(){switchAuthTab('reset');}
+
 async function doLogin(){
-  const email = document.getElementById('login-email').value.trim().toLowerCase();
-  const pass  = document.getElementById('login-pass').value;
-  const errEl = document.getElementById('login-error');
+  const email=document.getElementById('login-email').value.trim().toLowerCase();
+  const pass=document.getElementById('login-pass').value;
+  const errEl=document.getElementById('login-error');
   errEl.style.display='none';
-
   if(!email||!pass){showAuthError('login','Preenche todos os campos');return;}
-
-  const users = JSON.parse(localStorage.getItem('crm_users')||'[]');
-  const user  = users.find(u=>u.email===email);
+  const users=JSON.parse(localStorage.getItem('crm_users')||'[]');
+  const user=users.find(u=>u.email===email);
   if(!user){showAuthError('login','Email não encontrado');return;}
-
-  const hash = await hashPass(pass);
-  if(hash !== user.passHash){showAuthError('login','Password incorreta');return;}
-
-  // Success
-  currentUser = user;
-  localStorage.setItem('crm_session', email);
+  const hash=await hashPass(pass);
+  if(hash!==user.passHash){showAuthError('login','Password incorreta');return;}
+  currentUser=user;
+  localStorage.setItem('crm_session',email);
   showApp();
 }
 
 async function doRegister(){
-  const name  = document.getElementById('reg-name').value.trim();
-  const email = document.getElementById('reg-email').value.trim().toLowerCase();
-  const pass  = document.getElementById('reg-pass').value;
-  const pass2 = document.getElementById('reg-pass2').value;
-
+  const name=document.getElementById('reg-name').value.trim();
+  const email=document.getElementById('reg-email').value.trim().toLowerCase();
+  const pass=document.getElementById('reg-pass').value;
+  const pass2=document.getElementById('reg-pass2').value;
   if(!name||!email||!pass||!pass2){showAuthError('reg','Preenche todos os campos');return;}
   if(pass.length<6){showAuthError('reg','Password deve ter pelo menos 6 caracteres');return;}
   if(pass!==pass2){showAuthError('reg','As passwords não coincidem');return;}
   if(!/^[^@]+@[^@]+\.[^@]+$/.test(email)){showAuthError('reg','Email inválido');return;}
-
-  const users = JSON.parse(localStorage.getItem('crm_users')||'[]');
+  const users=JSON.parse(localStorage.getItem('crm_users')||'[]');
   if(users.find(u=>u.email===email)){showAuthError('reg','Este email já está registado');return;}
-
-  const hash = await hashPass(pass);
-  const user = {name, email, passHash:hash, createdAt: new Date().toISOString()};
-  users.push(user);
-  localStorage.setItem('crm_users', JSON.stringify(users));
-
-  currentUser = user;
-  localStorage.setItem('crm_session', email);
-  showApp();
-  toast(`✅ Bem-vindo, ${name}!`);
+  const hash=await hashPass(pass);
+  const code=genRecoveryCode();
+  const codeHash=await hashPass(code);
+  _pendingUser={name,email,passHash:hash,recoveryHash:codeHash,createdAt:new Date().toISOString()};
+  // Show recovery code
+  document.getElementById('recovery-code-text').textContent=code;
+  switchAuthTab('code');
 }
 
-function showAuthError(form, msg){
-  const id = form==='login' ? 'login-error' : 'reg-error';
-  const el = document.getElementById(id);
+function copyRecoveryCode(){
+  const code=document.getElementById('recovery-code-text').textContent;
+  navigator.clipboard?.writeText(code).then(()=>toast('📋 Código copiado!')).catch(()=>{});
+}
+
+function doRegister_confirm(){
+  if(!_pendingUser)return;
+  const users=JSON.parse(localStorage.getItem('crm_users')||'[]');
+  users.push(_pendingUser);
+  localStorage.setItem('crm_users',JSON.stringify(users));
+  currentUser=_pendingUser;
+  localStorage.setItem('crm_session',currentUser.email);
+  _pendingUser=null;
+  showApp();
+  toast(`✅ Bem-vindo, ${currentUser.name}!`);
+}
+
+async function doForgotRecover(){
+  const email=document.getElementById('forgot-email').value.trim().toLowerCase();
+  const code=document.getElementById('forgot-code').value.trim().toUpperCase();
+  const newpass=document.getElementById('forgot-newpass').value;
+  if(!email||!code||!newpass){showAuthError('forgot','Preenche todos os campos');return;}
+  if(newpass.length<6){showAuthError('forgot','Password deve ter pelo menos 6 caracteres');return;}
+  const users=JSON.parse(localStorage.getItem('crm_users')||'[]');
+  const idx=users.findIndex(u=>u.email===email);
+  if(idx===-1){showAuthError('forgot','Email não encontrado');return;}
+  const codeHash=await hashPass(code);
+  if(codeHash!==users[idx].recoveryHash){showAuthError('forgot','Código de recuperação incorreto');return;}
+  // Update password
+  users[idx].passHash=await hashPass(newpass);
+  localStorage.setItem('crm_users',JSON.stringify(users));
+  currentUser=users[idx];
+  localStorage.setItem('crm_session',email);
+  showApp();
+  toast('✅ Password alterada com sucesso!');
+}
+
+function doHardReset(){
+  const input=document.getElementById('reset-confirm-input').value.trim().toUpperCase();
+  if(input!=='APAGAR'){toast('❌ Escreve APAGAR para confirmar');return;}
+  // Clear everything
+  localStorage.clear();
+  toast('🗑️ Tudo apagado. A recarregar...');
+  setTimeout(()=>location.reload(),1200);
+}
+
+function showAuthError(form,msg){
+  const map={login:'login-error',reg:'reg-error',forgot:'forgot-error'};
+  const el=document.getElementById(map[form]);
   if(el){el.textContent=msg;el.style.display='block';}
 }
 
-function togglePassVis(inputId, btn){
-  const inp = document.getElementById(inputId);
+function togglePassVis(inputId,btn){
+  const inp=document.getElementById(inputId);
   if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}
   else{inp.type='password';btn.textContent='👁';}
 }
@@ -2495,7 +2605,32 @@ function doLogout(){
   localStorage.removeItem('crm_session');
   currentUser=null;
   closeSheet('settings-sheet');
-  setTimeout(()=>authInit(), 300);
+  setTimeout(()=>authInit(),300);
+}
+
+// ── Change password from settings ──
+async function doChangePass(){
+  if(!currentUser){return;}
+  const cur=document.getElementById('chpass-current').value;
+  const n1=document.getElementById('chpass-new').value;
+  const n2=document.getElementById('chpass-new2').value;
+  const errEl=document.getElementById('chpass-error');
+  errEl.style.display='none';
+  if(!cur||!n1||!n2){errEl.textContent='Preenche todos os campos';errEl.style.display='block';return;}
+  if(n1.length<6){errEl.textContent='Nova password deve ter pelo menos 6 caracteres';errEl.style.display='block';return;}
+  if(n1!==n2){errEl.textContent='As passwords não coincidem';errEl.style.display='block';return;}
+  const curHash=await hashPass(cur);
+  if(curHash!==currentUser.passHash){errEl.textContent='Password atual incorreta';errEl.style.display='block';return;}
+  const users=JSON.parse(localStorage.getItem('crm_users')||'[]');
+  const idx=users.findIndex(u=>u.email===currentUser.email);
+  if(idx===-1)return;
+  users[idx].passHash=await hashPass(n1);
+  currentUser=users[idx];
+  localStorage.setItem('crm_users',JSON.stringify(users));
+  document.getElementById('chpass-current').value='';
+  document.getElementById('chpass-new').value='';
+  document.getElementById('chpass-new2').value='';
+  toast('✅ Password alterada!');
 }
 
 window.addEventListener('load',()=>{
@@ -3899,6 +4034,31 @@ document.querySelectorAll('.c-yellow').forEach(el=>el.style.color='var(--yellow)
           <button class="btn btn-ghost btn-sm" style="flex:1" onclick="document.getElementById('restore-file').click()">📥 Restaurar</button>
         </div>
         <input type="file" id="restore-file" accept=".json" style="display:none" onchange="importBackup(this)">
+      </div>
+
+      <!-- ALTERAR PASSWORD -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
+          <span style="font-size:18px">🔒</span>
+          <div style="font-weight:700;font-size:14px">Alterar Password</div>
+        </div>
+        <div style="margin-bottom:10px;position:relative">
+          <input type="password" id="chpass-current" placeholder="Password atual"
+            style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;font-family:inherit;outline:none">
+        </div>
+        <div style="margin-bottom:10px">
+          <input type="password" id="chpass-new" placeholder="Nova password (mín. 6)"
+            style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;font-family:inherit;outline:none">
+        </div>
+        <div style="margin-bottom:10px">
+          <input type="password" id="chpass-new2" placeholder="Confirmar nova password"
+            style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;font-family:inherit;outline:none">
+        </div>
+        <div id="chpass-error" style="display:none;font-size:11px;color:var(--red);margin-bottom:8px"></div>
+        <button onclick="doChangePass()"
+          style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">
+          Alterar Password
+        </button>
       </div>
 
       <!-- LOGOUT -->
