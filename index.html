@@ -347,173 +347,6 @@ body{display:flex;flex-direction:column}
 </style>
 </head>
 <body>
-<!-- ═══ LOGIN / REGISTER SCREEN ═══ -->
-<div id="auth-screen" style="display:none;position:fixed;inset:0;z-index:9999;background:var(--bg);overflow-y:auto;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0)">
-  <div style="min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px">
-    <!-- Logo -->
-    <div style="text-align:center;margin-bottom:32px">
-      <div style="width:72px;height:72px;background:linear-gradient(135deg,var(--accent),#2ecc71);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 14px">🍽️</div>
-      <div style="font-weight:900;font-size:22px;letter-spacing:-0.5px">RestaurantePRO</div>
-      <div style="font-size:13px;color:var(--text2);margin-top:4px">CRM Alimentar de Campo</div>
-    </div>
-
-    <!-- Card -->
-    <div style="width:100%;max-width:380px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px">
-      
-      <!-- Tabs -->
-      <div style="display:flex;background:var(--surface2);border-radius:10px;padding:3px;margin-bottom:20px">
-        <button id="auth-tab-login" onclick="switchAuthTab('login')"
-          style="flex:1;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:700;cursor:pointer;background:var(--accent);color:#fff;font-family:inherit">
-          Entrar
-        </button>
-        <button id="auth-tab-register" onclick="switchAuthTab('register')"
-          style="flex:1;border:none;border-radius:8px;padding:8px;font-size:13px;font-weight:700;cursor:pointer;background:none;color:var(--text2);font-family:inherit">
-          Criar conta
-        </button>
-      </div>
-
-      <!-- Login form -->
-      <div id="auth-login-form">
-        <div id="auth-welcome" style="font-weight:800;font-size:16px;margin-bottom:18px;text-align:center"></div>
-        <div style="margin-bottom:12px">
-          <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">EMAIL</label>
-          <input id="login-email" type="email" placeholder="o.teu@email.com"
-            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none"
-            onkeydown="if(event.key==='Enter')document.getElementById('login-pass').focus()">
-        </div>
-        <div style="margin-bottom:18px;position:relative">
-          <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">PASSWORD</label>
-          <input id="login-pass" type="password" placeholder="••••••••"
-            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 40px 11px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none"
-            onkeydown="if(event.key==='Enter')doLogin()">
-          <button onclick="togglePassVis('login-pass',this)" style="position:absolute;right:10px;bottom:10px;background:none;border:none;cursor:pointer;font-size:16px;color:var(--text2)">👁</button>
-        </div>
-        <div id="login-error" style="display:none;background:rgba(232,57,74,.12);border:1px solid rgba(232,57,74,.3);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--red);margin-bottom:12px;text-align:center"></div>
-        <button onclick="doLogin()"
-          style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">
-          Entrar →
-        </button>
-        <button onclick="switchAuthTab('forgot')" style="width:100%;background:none;border:none;color:var(--text2);font-size:12px;cursor:pointer;margin-top:12px;font-family:inherit;text-decoration:underline">
-          Esqueci a password
-        </button>
-      </div>
-
-      <!-- Register form -->
-      <!-- REGISTER FORM -->
-      <div id="auth-register-form" style="display:none">
-        <div style="margin-bottom:12px">
-          <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">NOME</label>
-          <input id="reg-name" type="text" placeholder="O teu nome"
-            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none"
-            onkeydown="if(event.key==='Enter')document.getElementById('reg-email').focus()">
-        </div>
-        <div style="margin-bottom:12px">
-          <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">EMAIL</label>
-          <input id="reg-email" type="email" placeholder="o.teu@email.com"
-            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none"
-            onkeydown="if(event.key==='Enter')document.getElementById('reg-pass').focus()">
-        </div>
-        <div style="margin-bottom:12px;position:relative">
-          <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">PASSWORD</label>
-          <input id="reg-pass" type="password" placeholder="Mínimo 6 caracteres"
-            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 40px 11px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none"
-            onkeydown="if(event.key==='Enter')document.getElementById('reg-pass2').focus()">
-          <button onclick="togglePassVis('reg-pass',this)" style="position:absolute;right:10px;bottom:10px;background:none;border:none;cursor:pointer;font-size:16px;color:var(--text2)">👁</button>
-        </div>
-        <div style="margin-bottom:18px;position:relative">
-          <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">CONFIRMAR PASSWORD</label>
-          <input id="reg-pass2" type="password" placeholder="Repete a password"
-            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 40px 11px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none"
-            onkeydown="if(event.key==='Enter')doRegister()">
-          <button onclick="togglePassVis('reg-pass2',this)" style="position:absolute;right:10px;bottom:10px;background:none;border:none;cursor:pointer;font-size:16px;color:var(--text2)">👁</button>
-        </div>
-        <div id="reg-error" style="display:none;background:rgba(232,57,74,.12);border:1px solid rgba(232,57,74,.3);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--red);margin-bottom:12px;text-align:center"></div>
-        <button onclick="doRegister()"
-          style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">
-          Criar Conta →
-        </button>
-      </div>
-
-      <!-- RECOVERY CODE DISPLAY (shown after register) -->
-      <div id="auth-code-display" style="display:none">
-        <div style="text-align:center;margin-bottom:16px">
-          <div style="font-size:32px;margin-bottom:8px">🔐</div>
-          <div style="font-weight:800;font-size:16px;margin-bottom:6px">Guarda este código!</div>
-          <div style="font-size:12px;color:var(--text2);line-height:1.5">É o único modo de recuperares a conta se esqueceres a password. Guarda num papel ou nas notas do telemóvel.</div>
-        </div>
-        <div id="recovery-code-box"
-          style="background:var(--surface2);border:2px dashed var(--accent);border-radius:12px;padding:18px;text-align:center;margin-bottom:16px;cursor:pointer"
-          onclick="copyRecoveryCode()" title="Clica para copiar">
-          <div id="recovery-code-text" style="font-family:DM Mono,monospace;font-size:20px;font-weight:700;letter-spacing:4px;color:var(--accent2)"></div>
-          <div style="font-size:11px;color:var(--text2);margin-top:6px">clica para copiar</div>
-        </div>
-        <button onclick="doRegister_confirm()"
-          style="width:100%;background:var(--green);color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit">
-          ✅ Guardei o código — Entrar
-        </button>
-      </div>
-
-      <!-- FORGOT PASSWORD FORM -->
-      <div id="auth-forgot-form" style="display:none">
-        <div style="text-align:center;margin-bottom:16px">
-          <div style="font-size:28px;margin-bottom:6px">🔑</div>
-          <div style="font-weight:800;font-size:15px;margin-bottom:4px">Recuperar acesso</div>
-          <div style="font-size:12px;color:var(--text2)">Usa o código que recebeste quando criaste a conta</div>
-        </div>
-        <div style="margin-bottom:12px">
-          <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">EMAIL</label>
-          <input id="forgot-email" type="email" placeholder="o.teu@email.com"
-            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none">
-        </div>
-        <div style="margin-bottom:12px">
-          <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">CÓDIGO DE RECUPERAÇÃO</label>
-          <input id="forgot-code" type="text" placeholder="XXXX-XXXX"
-            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 14px;color:var(--text);font-size:14px;font-family:DM Mono,monospace;letter-spacing:2px;outline:none">
-        </div>
-        <div style="margin-bottom:12px;position:relative">
-          <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">NOVA PASSWORD</label>
-          <input id="forgot-newpass" type="password" placeholder="Nova password"
-            style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 40px 11px 14px;color:var(--text);font-size:14px;font-family:inherit;outline:none">
-          <button onclick="togglePassVis('forgot-newpass',this)" style="position:absolute;right:10px;bottom:10px;background:none;border:none;cursor:pointer;font-size:16px;color:var(--text2)">👁</button>
-        </div>
-        <div id="forgot-error" style="display:none;background:rgba(232,57,74,.12);border:1px solid rgba(232,57,74,.3);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--red);margin-bottom:12px;text-align:center"></div>
-        <button onclick="doForgotRecover()"
-          style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:10px">
-          Recuperar Conta →
-        </button>
-        <div style="border-top:1px solid var(--border);padding-top:12px;margin-top:4px">
-          <div style="font-size:12px;color:var(--text2);text-align:center;margin-bottom:8px">Não tens o código?</div>
-          <button onclick="showResetConfirm()"
-            style="width:100%;background:rgba(232,57,74,.1);border:1px solid rgba(232,57,74,.3);border-radius:10px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;color:var(--red);font-family:inherit">
-            ⚠️ Reset total (perde todos os dados)
-          </button>
-        </div>
-        <button onclick="showLoginPanel()" style="width:100%;background:none;border:none;color:var(--text2);font-size:12px;cursor:pointer;margin-top:10px;font-family:inherit">← Voltar</button>
-      </div>
-
-      <!-- RESET CONFIRM -->
-      <div id="auth-reset-confirm" style="display:none">
-        <div style="text-align:center;margin-bottom:20px">
-          <div style="font-size:40px;margin-bottom:10px">⚠️</div>
-          <div style="font-weight:800;font-size:16px;color:var(--red);margin-bottom:8px">Apagar tudo?</div>
-          <div style="font-size:13px;color:var(--text2);line-height:1.6">Isto vai apagar <b style="color:var(--text)">todos os teus dados</b> — clientes, visitas, vendas e conta. Esta ação é <b style="color:var(--red)">irreversível</b>.</div>
-        </div>
-        <div style="margin-bottom:16px">
-          <label style="font-size:12px;color:var(--text2);font-weight:700;display:block;margin-bottom:5px">ESCREVE "APAGAR" PARA CONFIRMAR</label>
-          <input id="reset-confirm-input" type="text" placeholder="APAGAR"
-            style="width:100%;background:var(--surface2);border:1px solid rgba(232,57,74,.4);border-radius:10px;padding:11px 14px;color:var(--red);font-size:14px;font-family:inherit;outline:none;text-align:center;font-weight:700">
-        </div>
-        <button onclick="doHardReset()"
-          style="width:100%;background:var(--red);color:#fff;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:800;cursor:pointer;font-family:inherit;margin-bottom:10px">
-          🗑️ Apagar tudo
-        </button>
-        <button onclick="switchAuthTab('forgot')" style="width:100%;background:none;border:none;color:var(--text2);font-size:12px;cursor:pointer;font-family:inherit">← Voltar</button>
-      </div>
-
-    </div>
-    <div style="margin-top:16px;font-size:11px;color:var(--text2);text-align:center">Os dados ficam guardados apenas neste dispositivo</div>
-  </div>
-</div>
 
 
 <!-- TOPBAR -->
@@ -694,26 +527,17 @@ body{display:flex;flex-direction:column}
   <!-- ═══════════ CALENDAR PAGE ═══════════ -->
   <div class="page" id="page-calendar">
     <div class="cal-page">
-      <!-- Google Calendar connect bar -->
-      <div id="gcal-bar" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:12px;display:flex;align-items:center;gap:10px">
-        <span style="font-size:20px">📆</span>
-        <div style="flex:1;min-width:0">
-          <div style="font-size:13px;font-weight:700" id="gcal-bar-title">Google Calendar</div>
-          <div style="font-size:11px;color:var(--text2)" id="gcal-bar-sub">Liga para sincronizar reuniões</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0 12px">
+        <div style="display:flex;align-items:center;gap:10px">
+          <button onclick="calPrev()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text);cursor:pointer">‹</button>
+          <span id="cal-label" style="font-weight:800;font-size:16px"></span>
+          <button onclick="calNext()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 12px;color:var(--text);cursor:pointer">›</button>
         </div>
-        <button id="gcal-btn" class="btn btn-ghost btn-sm" onclick="gcalToggle()">Ligar</button>
+        <button class="btn btn-primary btn-sm" onclick="openAddMeetSheet()">+ Reunião</button>
       </div>
-      <div class="cal-month-nav">
-        <button class="cal-nav-btn" onclick="calPrev()">‹</button>
-        <h3 id="cal-label">—</h3>
-        <button class="cal-nav-btn" onclick="calNext()">›</button>
-      </div>
-      <div class="cal-grid-mobile" id="cgrid"></div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-        <div style="font-size:15px;font-weight:800" id="cal-day-label">—</div>
-        <button class="btn btn-primary btn-sm" onclick="openMeetSheet()">+ Reunião</button>
-      </div>
-      <div class="cal-day-events" id="cal-events"></div>
+      <div id="cgrid" class="cal-grid-mobile"></div>
+      <div style="font-weight:800;font-size:15px;margin-bottom:10px" id="cal-day-label"></div>
+      <div id="cal-events" class="cal-day-events"></div>
     </div>
   </div>
 
@@ -968,12 +792,7 @@ body{display:flex;flex-direction:column}
         <select id="mrest"><option value="">Opcional...</option></select>
       </div>
       <div class="field"><label>Notas</label><textarea id="mnotes" placeholder="Agenda, notas..."></textarea></div>
-      <div id="gcal-sync-opt" style="display:none;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px;margin-top:4px">
-        <label style="display:flex;align-items:center;gap:10px;cursor:pointer">
-          <input type="checkbox" id="mcal-sync" checked style="width:18px;height:18px;accent-color:var(--accent)"/>
-          <span style="font-size:13px;font-weight:700">📆 Adicionar ao Google Calendar</span>
-        </label>
-      </div>
+      
     </div>
     <div class="sheet-footer">
       <button class="btn btn-ghost" style="flex:1" onclick="closeSheet('meet-sheet')">Cancelar</button>
@@ -2225,7 +2044,7 @@ function renderDayEvents(){
       <div class="ev-actions">
         ${m.status!=='done'?`<button class="btn btn-green btn-sm" onclick="setMeetStatus('${m.id}','done')">✅ Concluída</button>`:''}
         ${m.status!=='cancel'?`<button class="btn btn-ghost btn-sm" onclick="setMeetStatus('${m.id}','cancel')">❌</button>`:''}
-        ${!m.gcalId&&!m._fromGcal&&gcalToken?`<button class="btn btn-ghost btn-sm" onclick="syncMeetToGcal('${m.id}')" title="Adicionar ao Google Calendar">📆</button>`:''}
+        
         <button class="btn btn-red btn-sm" onclick="delMeeting('${m.id}')">🗑️</button>
       </div>
     </div>`;
@@ -2290,7 +2109,7 @@ function setMeetStatus(id,s){const m=meets.find(x=>x.id===id);if(m){m.status=s;s
 function delMeeting(id){
   if(!confirm('Eliminar reunião?'))return;
   const m=meets.find(x=>x.id===id);
-  // Also delete from Google Calendar if synced
+  // gcal removed
   if(m?.gcalId&&gcalToken){
     fetch(`https://www.googleapis.com/calendar/v3/calendars/primary/events/${m.gcalId}`,{
       method:'DELETE',headers:{Authorization:'Bearer '+gcalToken}
@@ -2309,7 +2128,57 @@ let gcalToken=LS.get('gcal_token')||null;
 let gcalTokenExpiry=LS.get('gcal_token_expiry')||0;
 let gcalClient=null;
 
+// Detect if running inside Capacitor (native app)
+const isNative=()=>window.Capacitor?.isNativePlatform?.()===true;
+
+async function gcalSignInNative(){
+  try{
+    // Use Capacitor Browser plugin to open OAuth in external browser
+    const clientId='205297842728-dh6vfq48qh0cpoi41cvanj08dj576af2.apps.googleusercontent.com';
+    const redirectUri='com.restaurantepro.app:/oauth2redirect';
+    const scope=encodeURIComponent('https://www.googleapis.com/auth/calendar');
+    const authUrl=`https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=${scope}&prompt=select_account`;
+
+    // Open in system browser
+    if(window.Capacitor?.Plugins?.Browser){
+      await window.Capacitor.Plugins.Browser.open({url:authUrl});
+      // Listen for the redirect
+      window.Capacitor.Plugins.App.addListener('appUrlOpen',(data)=>{
+        const url=data.url;
+        if(url.includes('access_token')){
+          const token=url.match(/access_token=([^&]+)/)?.[1];
+          if(token){
+            gcalToken=decodeURIComponent(token);
+            gcalTokenExpiry=Date.now()+3500*1000;
+            LS.set('gcal_token',gcalToken);
+            LS.set('gcal_token_expiry',gcalTokenExpiry);
+            updateGcalBar(true);
+            toast('✅ Google Calendar ligado!');
+            document.getElementById('gcal-sync-opt').style.display='block';
+            gcalImportEvents();
+            window.Capacitor.Plugins.Browser.close();
+          }
+        }
+      });
+    } else {
+      // Fallback: open in webview
+      window.open(authUrl,'_blank');
+    }
+  }catch(e){
+    console.error('GCal native error',e);
+    toast('❌ Erro ao ligar: '+(e?.message||e));
+  }
+}
+
 function gcalInit(){
+  if(isNative()){
+    // Restore saved token if still valid
+    if(gcalToken&&gcalTokenExpiry>Date.now()){
+      updateGcalBar(true);
+      document.getElementById('gcal-sync-opt').style.display='block';
+    }
+    return;
+  }
   if(!window.google?.accounts?.oauth2)return;
   gcalClient=google.accounts.oauth2.initTokenClient({
     client_id:GCAL_CLIENT_ID,
@@ -2322,13 +2191,10 @@ function gcalInit(){
       LS.set('gcal_token_expiry',gcalTokenExpiry);
       updateGcalBar(true);
       toast('✅ Google Calendar ligado!');
-      // Show sync option in meeting sheet
       document.getElementById('gcal-sync-opt').style.display='block';
-      // Import upcoming events from Google Calendar
       gcalImportEvents();
     }
   });
-  // If we have a saved token that hasn't expired, restore session
   if(gcalToken&&gcalTokenExpiry>Date.now()){
     updateGcalBar(true);
     document.getElementById('gcal-sync-opt').style.display='block';
@@ -2341,7 +2207,8 @@ function gcalInit(){
 function gcalToggle(){
   if(gcalToken&&gcalTokenExpiry>Date.now()){
     // Disconnect
-    google.accounts.oauth2.revoke(gcalToken,()=>{});
+    if(!isNative())google.accounts.oauth2.revoke(gcalToken,()=>{});
+    else{try{window.Capacitor.Plugins.GoogleAuth.signOut();}catch{}}
     gcalToken=null;
     LS.set('gcal_token',null);
     LS.set('gcal_token_expiry',0);
@@ -2349,9 +2216,12 @@ function gcalToggle(){
     document.getElementById('gcal-sync-opt').style.display='none';
     toast('🔌 Google Calendar desligado');
   }else{
-    // Connect — triggers Google login popup
-    if(!gcalClient){toast('⚠️ A carregar... tenta novamente em 2s');setTimeout(gcalInit,1000);return;}
-    gcalClient.requestAccessToken();
+    if(isNative()){
+      gcalSignInNative();
+    }else{
+      if(!gcalClient){toast('⚠️ A carregar... tenta novamente em 2s');setTimeout(gcalInit,1000);return;}
+      gcalClient.requestAccessToken();
+    }
   }
 }
 
@@ -2479,13 +2349,10 @@ function authInit(){
 }
 
 function showApp(){
-  document.getElementById('auth-screen').style.display='none';
   document.querySelector('.topbar').style.display='';
   document.querySelector('.pages').style.display='';
   document.querySelector('.bottom-nav').style.display='';
   const dsn=document.querySelector('.desktop-nav');if(dsn)dsn.style.display='';
-  const logoText=document.querySelector('.logo-text');
-  if(logoText&&currentUser)logoText.innerHTML=`RestaurantePRO <span style="font-size:11px;font-weight:500;color:var(--text2)">${currentUser.name}</span>`;
 }
 
 function switchAuthTab(tab){
@@ -2634,7 +2501,6 @@ async function doChangePass(){
 }
 
 window.addEventListener('load',()=>{
-  authInit();
   setTimeout(gcalInit,1500); // wait for GSI to load
 });
 
@@ -2916,7 +2782,7 @@ function updateKeyStatuses(){
   }
 }
 
-function getApiKey(){return localStorage.getItem('crm_anthropic_key')||'AIzaSyBq_gaiqECStuldAREEQ1pCHxCYX2G9IMY';}
+function getApiKey(){return localStorage.getItem('crm_anthropic_key')||'';}
 
 function saveApiKey(){
   const val=document.getElementById('apikey-input').value.trim();
@@ -3045,19 +2911,18 @@ async function sendAiChat(){
   const systemCtx=`És um assistente comercial especializado em vendas de produtos alimentares em Portugal.
 Dados do CRM: ${rests.length} estabelecimentos, ${rests.filter(r=>r.status==='green').length} clientes ativos, ${rests.filter(r=>r.status==='yellow').length} a explorar, ${meets.filter(m=>!m.status||m.status==='pending').length} reuniões pendentes.
 Responde sempre em português europeu (de Portugal). És direto, prático e profissional. Quando gerares emails ou documentos, formata-os corretamente e prontos a usar.`;
-  const fullHistory=[
-    {role:'user',parts:[{text:systemCtx}]},
-    {role:'model',parts:[{text:'Entendido! Pronto para ajudar.'}]},
-    ...aiChatHistory
+  const messages=[
+    {role:'system',content:systemCtx},
+    ...aiChatHistory.map(m=>({role:m.role==='model'?'assistant':'user',content:m.parts[0].text}))
   ];
   try{
-    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${getApiKey()}`,{
+    const res=await fetch('https://restaurantepro-ai.rodriguesmmiguel25.workers.dev',{
       method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({contents:fullHistory,generationConfig:{maxOutputTokens:1500,temperature:0.7}})
+      body:JSON.stringify({model:'llama-3.3-70b-versatile',messages,max_tokens:1500,temperature:0.7})
     });
     const data=await res.json();
     if(data.error)throw new Error(data.error.message);
-    const reply=data.candidates?.[0]?.content?.parts?.[0]?.text||'Não consegui gerar uma resposta.';
+    const reply=data.choices?.[0]?.message?.content||'Não consegui gerar uma resposta.';
     aiChatHistory.push({role:'model',parts:[{text:reply}]});
     updateAiMessage(loadingId,reply);
     if(aiChatHistory.length>20)aiChatHistory=aiChatHistory.slice(-20);
@@ -3287,17 +3152,18 @@ Com base no tipo de estabelecimento (${r.category||'estabelecimento'}), cria um 
 
 Responde de forma concisa e prática, formatado com emojis.`;
   try{
-    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,{
+    const res=await fetch('https://restaurantepro-ai.rodriguesmmiguel25.workers.dev',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        contents:[{parts:[{text:prompt}]}],
-        generationConfig:{maxOutputTokens:700,temperature:0.7}
+        model:'llama-3.3-70b-versatile',
+        messages:[{role:'user',content:prompt}],
+        max_tokens:700,temperature:0.7
       })
     });
     const data=await res.json();
     if(data.error){throw new Error(data.error.message);}
-    const text=data.candidates?.[0]?.content?.parts?.[0]?.text||'Erro ao gerar resposta.';
+    const text=data.choices?.[0]?.message?.content||'Erro ao gerar resposta.';
     document.getElementById('ai-content').innerHTML=`<div style="font-size:13px;line-height:1.7;white-space:pre-wrap">${text.replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>')}</div>`;
   }catch(e){
     document.getElementById('ai-content').innerHTML=`<div style="color:var(--red)">Erro ao contactar IA. Verifica a ligação.</div>`;
@@ -4036,37 +3902,33 @@ document.querySelectorAll('.c-yellow').forEach(el=>el.style.color='var(--yellow)
         <input type="file" id="restore-file" accept=".json" style="display:none" onchange="importBackup(this)">
       </div>
 
-      <!-- ALTERAR PASSWORD -->
-      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:12px">
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px">
-          <span style="font-size:18px">🔒</span>
-          <div style="font-weight:700;font-size:14px">Alterar Password</div>
-        </div>
-        <div style="margin-bottom:10px;position:relative">
-          <input type="password" id="chpass-current" placeholder="Password atual"
-            style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;font-family:inherit;outline:none">
-        </div>
-        <div style="margin-bottom:10px">
-          <input type="password" id="chpass-new" placeholder="Nova password (mín. 6)"
-            style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;font-family:inherit;outline:none">
-        </div>
-        <div style="margin-bottom:10px">
-          <input type="password" id="chpass-new2" placeholder="Confirmar nova password"
-            style="width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-size:13px;font-family:inherit;outline:none">
-        </div>
-        <div id="chpass-error" style="display:none;font-size:11px;color:var(--red);margin-bottom:8px"></div>
-        <button onclick="doChangePass()"
-          style="width:100%;background:var(--accent);color:#fff;border:none;border-radius:8px;padding:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit">
-          Alterar Password
-        </button>
-      </div>
 
-      <!-- LOGOUT -->
-      <div style="margin-bottom:12px">
-        <button onclick="doLogout()"
-          style="width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:13px;font-size:14px;font-weight:700;cursor:pointer;color:var(--text);font-family:inherit;display:flex;align-items:center;justify-content:center;gap:8px">
-          🚪 Terminar Sessão
-        </button>
+      <!-- SOBRE -->
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px">
+        <div style="font-weight:700;font-size:14px;margin-bottom:12px">ℹ️ Sobre a App</div>
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:14px">
+          <div style="width:52px;height:52px;background:linear-gradient(135deg,#2563eb,#1d4ed8);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0">🍽️</div>
+          <div>
+            <div style="font-weight:800;font-size:16px">RestaurantePRO</div>
+            <div style="font-size:12px;color:var(--text2)">CRM Alimentar de Campo</div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px">Versão 1.0.0</div>
+          </div>
+        </div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-bottom:14px">Aplicação de gestão comercial para representantes de produtos alimentares. Gere clientes, planeia visitas, agenda reuniões e usa IA para comunicações profissionais.</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <a href="https://mikerodri25.github.io/restaurantepro/privacy-policy.html" target="_blank" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text)">
+            <span style="font-size:13px">🔒 Política de Privacidade</span>
+            <span style="color:var(--text2)">›</span>
+          </a>
+          <a href="https://mikerodri25.github.io/restaurantepro/terms.html" target="_blank" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text)">
+            <span style="font-size:13px">📄 Termos de Utilização</span>
+            <span style="color:var(--text2)">›</span>
+          </a>
+          <a href="/cdn-cgi/l/email-protection#7c0e13180e151b09190f1111151b0919104e493c1b111d1510521f1311" style="display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;text-decoration:none;color:var(--text)">
+            <span style="font-size:13px">📬 Suporte & Contacto</span>
+            <span style="color:var(--text2)">›</span>
+          </a>
+        </div>
       </div>
 
       <!-- DANGER ZONE -->
@@ -4081,7 +3943,7 @@ document.querySelectorAll('.c-yellow').forEach(el=>el.style.color='var(--yellow)
 </div>
 
 <!-- SERVICE WORKER REGISTRATION -->
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 if('serviceWorker' in navigator){
   window.addEventListener('load',()=>{
     // Inline service worker as blob for single-file PWA
@@ -4093,7 +3955,7 @@ self.addEventListener('fetch',e=>{e.respondWith(caches.match(e.request).then(r=>
     `;
     const blob=new Blob([swCode],{type:'application/javascript'});
     const url=URL.createObjectURL(blob);
-    navigator.serviceWorker.register(url).catch(()=>{});
+    navigator.serviceWorker.register(url);
   });
 }
 </script>
